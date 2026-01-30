@@ -51,7 +51,7 @@ export function Navbar() {
         
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <Button asChild>
-            <Link href="#contacto">Solicitar Consulta</Link>
+            <Link href="#contacto">Solicitar Co</Link>
           </Button>
         </div>
       </nav>
