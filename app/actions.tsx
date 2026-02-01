@@ -1,0 +1,183 @@
+"use server"
+
+import { query } from "@/lib/db"
+import { revalidatePath } from "next/cache"
+
+export type ConsultaFormData = {
+  nombre: string
+  email: string
+  telefono: string
+  empresa: string
+  tipo_consulta: string
+  mensaje: string
+}
+
+export type Consulta = {
+  id: number
+  nombre: string
+  email: string
+  telefono: string
+  empresa: string
+  tipo_consulta: string
+  mensaje: string
+  estado: string
+  created_at: string
+  updated_at: string
+}
+
+export type ActionResult = {
+  success: boolean
+  message: string
+  error?: string
+}
+
+export async function submitConsulta(formData: ConsultaFormData): Promise<ActionResult> {
+  try {
+    await query(
+      `INSERT INTO consultas (nombre, email, telefono, empresa, tipo_consulta, mensaje, estado) 
+       VALUES (?, ?, ?, ?, ?, ?, 'pendiente')`,
+      [
+        formData.nombre,
+        formData.email,
+        formData.telefono,
+        formData.empresa,
+        formData.tipo_consulta,
+        formData.mensaje,
+      ]
+    )
+
+    // Send email notification
+    await sendEmailNotification(formData)
+
+    revalidatePath("/admin", "page")
+
+    return {
+      success: true,
+      message: "Consulta enviada exitosamente. Revisa tu correo para la confirmacion.",
+    }
+  } catch (error) {
+    console.error("Error in submitConsulta:", error)
+    return {
+      success: false,
+      message: "Error al enviar la consulta. Verifica la conexion a la base de datos.",
+      error: error instanceof Error ? error.message : "Unknown error",
+    }
+  }
+}
+
+async function sendEmailNotification(formData: ConsultaFormData) {
+  const apiKey = process.env.RESEND_API_KEY
+  
+  if (!apiKey) {
+    console.error("RESEND_API_KEY not configured - email not sent")
+    return
+  }
+
+  const emailHtml = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #3b82f6, #10b981); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+        .details { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #3b82f6; }
+        .footer { text-align: center; margin-top: 20px; color: #666; font-size: 14px; }
+        h1 { margin: 0; font-size: 24px; }
+        h2 { color: #3b82f6; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>Web@ Consul</h1>
+          <p>Consultoria Digital Profesional</p>
+        </div>
+        <div class="content">
+          <h2>Hola ${formData.nombre},</h2>
+          <p>Hemos recibido tu solicitud de consulta y queremos confirmarte que esta siendo procesada por nuestro equipo.</p>
+          
+          <div class="details">
+            <h3>Detalles de tu consulta:</h3>
+            <p><strong>Tipo de consulta:</strong> ${formData.tipo_consulta}</p>
+            <p><strong>Empresa:</strong> ${formData.empresa}</p>
+            <p><strong>Telefono:</strong> ${formData.telefono}</p>
+            <p><strong>Mensaje:</strong></p>
+            <p>${formData.mensaje}</p>
+          </div>
+          
+          <p>Nuestro equipo de expertos se pondra en contacto contigo en las proximas <strong>24-48 horas habiles</strong> para atender tu solicitud.</p>
+          
+          <p>Si tienes alguna pregunta urgente, no dudes en contactarnos.</p>
+          
+          <div class="footer">
+            <p>Gracias por confiar en <strong>Web@ Consul</strong></p>
+            <p>Este es un correo automatico, por favor no respondas directamente.</p>
+          </div>
+        </div>
+      </div>
+    </body>
+    </html>
+  `
+
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "Web@ Consul <onboarding@resend.dev>",
+        to: [formData.email],
+        subject: "Confirmacion de consulta - Web@ Consul",
+        html: emailHtml,
+      }),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      console.error("Error sending email:", errorData)
+    }
+  } catch (error) {
+    console.error("Error in sendEmailNotification:", error)
+  }
+}
+
+export async function getConsultas(): Promise<{ data: Consulta[] | null; error: string | null }> {
+  try {
+    const data = await query<Consulta[]>(
+      "SELECT * FROM consultas ORDER BY created_at DESC"
+    )
+
+    return { data, error: null }
+  } catch (error) {
+    console.error("Error in getConsultas:", error)
+    return { data: null, error: "Error al obtener las consultas. Verifica la conexion a la base de datos." }
+  }
+}
+
+export async function updateConsultaStatus(id: number, estado: string): Promise<ActionResult> {
+  try {
+    await query(
+      "UPDATE consultas SET estado = ? WHERE id = ?",
+      [estado, id]
+    )
+
+    revalidatePath("/admin", "page")
+
+    return {
+      success: true,
+      message: "Estado actualizado correctamente",
+    }
+  } catch (error) {
+    console.error("Error in updateConsultaStatus:", error)
+    return {
+      success: false,
+      message: "Error al actualizar el estado",
+      error: error instanceof Error ? error.message : "Unknown error",
+    }
+  }
+}
