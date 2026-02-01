@@ -1,6 +1,14 @@
 "use server"
 
+<<<<<<< HEAD
 import { query } from "@/lib/db"
+=======
+<<<<<<< HEAD
+import { query } from "@/lib/db"
+=======
+import { createClient } from "@/lib/supabase/server"
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
 import { revalidatePath } from "next/cache"
 
 export type ConsultaFormData = {
@@ -12,6 +20,10 @@ export type ConsultaFormData = {
   mensaje: string
 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
 export type Consulta = {
   id: number
   nombre: string
@@ -25,6 +37,11 @@ export type Consulta = {
   updated_at: string
 }
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
 export type ActionResult = {
   success: boolean
   message: string
@@ -33,6 +50,10 @@ export type ActionResult = {
 
 export async function submitConsulta(formData: ConsultaFormData): Promise<ActionResult> {
   try {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
     await query(
       `INSERT INTO consultas (nombre, email, telefono, empresa, tipo_consulta, mensaje, estado) 
        VALUES (?, ?, ?, ?, ?, ?, 'pendiente')`,
@@ -45,6 +66,31 @@ export async function submitConsulta(formData: ConsultaFormData): Promise<Action
         formData.mensaje,
       ]
     )
+<<<<<<< HEAD
+=======
+=======
+    const supabase = await createClient()
+
+    const { error } = await supabase.from("consultas").insert({
+      nombre: formData.nombre,
+      email: formData.email,
+      telefono: formData.telefono,
+      empresa: formData.empresa,
+      tipo_consulta: formData.tipo_consulta,
+      mensaje: formData.mensaje,
+      estado: "pendiente",
+    })
+
+    if (error) {
+      console.error("Error inserting consulta:", error)
+      return {
+        success: false,
+        message: "Error al enviar la consulta",
+        error: error.message,
+      }
+    }
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
 
     // Send email notification
     await sendEmailNotification(formData)
@@ -59,7 +105,15 @@ export async function submitConsulta(formData: ConsultaFormData): Promise<Action
     console.error("Error in submitConsulta:", error)
     return {
       success: false,
+<<<<<<< HEAD
       message: "Error al enviar la consulta. Verifica la conexion a la base de datos.",
+=======
+<<<<<<< HEAD
+      message: "Error al enviar la consulta. Verifica la conexion a la base de datos.",
+=======
+      message: "Error inesperado al procesar la consulta",
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
       error: error instanceof Error ? error.message : "Unknown error",
     }
   }
@@ -69,7 +123,15 @@ async function sendEmailNotification(formData: ConsultaFormData) {
   const apiKey = process.env.RESEND_API_KEY
   
   if (!apiKey) {
+<<<<<<< HEAD
     console.error("RESEND_API_KEY not configured - email not sent")
+=======
+<<<<<<< HEAD
+    console.error("RESEND_API_KEY not configured - email not sent")
+=======
+    console.error("RESEND_API_KEY not configured")
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
     return
   }
 
@@ -146,15 +208,41 @@ async function sendEmailNotification(formData: ConsultaFormData) {
   }
 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
 export async function getConsultas(): Promise<{ data: Consulta[] | null; error: string | null }> {
   try {
     const data = await query<Consulta[]>(
       "SELECT * FROM consultas ORDER BY created_at DESC"
     )
+<<<<<<< HEAD
+=======
+=======
+export async function getConsultas() {
+  try {
+    const supabase = await createClient()
+
+    const { data, error } = await supabase
+      .from("consultas")
+      .select("*")
+      .order("created_at", { ascending: false })
+
+    if (error) {
+      console.error("Error fetching consultas:", error)
+      return { data: null, error: error.message }
+    }
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
 
     return { data, error: null }
   } catch (error) {
     console.error("Error in getConsultas:", error)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
     return { data: null, error: "Error al obtener las consultas. Verifica la conexion a la base de datos." }
   }
 }
@@ -165,6 +253,32 @@ export async function updateConsultaStatus(id: number, estado: string): Promise<
       "UPDATE consultas SET estado = ? WHERE id = ?",
       [estado, id]
     )
+<<<<<<< HEAD
+=======
+=======
+    return { data: null, error: "Error fetching consultas" }
+  }
+}
+
+export async function updateConsultaStatus(id: string, estado: string): Promise<ActionResult> {
+  try {
+    const supabase = await createClient()
+
+    const { error } = await supabase
+      .from("consultas")
+      .update({ estado })
+      .eq("id", id)
+
+    if (error) {
+      console.error("Error updating consulta:", error)
+      return {
+        success: false,
+        message: "Error al actualizar el estado",
+        error: error.message,
+      }
+    }
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
 
     revalidatePath("/admin", "page")
 
@@ -176,7 +290,15 @@ export async function updateConsultaStatus(id: number, estado: string): Promise<
     console.error("Error in updateConsultaStatus:", error)
     return {
       success: false,
+<<<<<<< HEAD
       message: "Error al actualizar el estado",
+=======
+<<<<<<< HEAD
+      message: "Error al actualizar el estado",
+=======
+      message: "Error inesperado",
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
       error: error instanceof Error ? error.message : "Unknown error",
     }
   }

@@ -14,6 +14,10 @@ const ToggleGroupContext = React.createContext<
   variant: 'default',
 })
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
 const ToggleGroup = React.forwardRef<
   React.ElementRef<typeof ToggleGroupPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root> &
@@ -37,16 +41,72 @@ const ToggleGroupItem = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item> &
     VariantProps<typeof toggleVariants>
 >(({ className, children, variant, size, ...props }, ref) => {
+<<<<<<< HEAD
+=======
+=======
+function ToggleGroup({
+  className,
+  variant,
+  size,
+  children,
+  ...props
+}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &
+  VariantProps<typeof toggleVariants>) {
+  return (
+    <ToggleGroupPrimitive.Root
+      data-slot="toggle-group"
+      data-variant={variant}
+      data-size={size}
+      className={cn(
+        'group/toggle-group flex w-fit items-center rounded-md data-[variant=outline]:shadow-xs',
+        className,
+      )}
+      {...props}
+    >
+      <ToggleGroupContext.Provider value={{ variant, size }}>
+        {children}
+      </ToggleGroupContext.Provider>
+    </ToggleGroupPrimitive.Root>
+  )
+}
+
+function ToggleGroupItem({
+  className,
+  children,
+  variant,
+  size,
+  ...props
+}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &
+  VariantProps<typeof toggleVariants>) {
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
   const context = React.useContext(ToggleGroupContext)
 
   return (
     <ToggleGroupPrimitive.Item
+<<<<<<< HEAD
       ref={ref}
+=======
+<<<<<<< HEAD
+      ref={ref}
+=======
+      data-slot="toggle-group-item"
+      data-variant={context.variant || variant}
+      data-size={context.size || size}
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
       className={cn(
         toggleVariants({
           variant: context.variant || variant,
           size: context.size || size,
         }),
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+        'min-w-0 flex-1 shrink-0 rounded-none shadow-none first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10 data-[variant=outline]:border-l-0 data-[variant=outline]:first:border-l',
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
         className,
       )}
       {...props}
@@ -54,8 +114,18 @@ const ToggleGroupItem = React.forwardRef<
       {children}
     </ToggleGroupPrimitive.Item>
   )
+<<<<<<< HEAD
 })
 
 ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName
+=======
+<<<<<<< HEAD
+})
+
+ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName
+=======
+}
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
 
 export { ToggleGroup, ToggleGroupItem }

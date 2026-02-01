@@ -10,7 +10,10 @@ export type Admin = {
   email: string
 }
 
+<<<<<<< HEAD
 // Credenciales de demostración para probar sin base de datos
+=======
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
 const DEMO_ADMIN = {
   id: 1,
   nombre: "Administrador Demo",
@@ -28,7 +31,10 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
 
 export async function login(email: string, password: string): Promise<{ success: boolean; error?: string; admin?: Admin }> {
   try {
+<<<<<<< HEAD
     // Primero intentar con credenciales de demostración
+=======
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
     if (email === DEMO_ADMIN.email && password === DEMO_ADMIN.password) {
       const sessionData = {
         id: DEMO_ADMIN.id,
@@ -56,7 +62,10 @@ export async function login(email: string, password: string): Promise<{ success:
       }
     }
 
+<<<<<<< HEAD
     // Si no son credenciales demo, intentar con la base de datos
+=======
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
     const results = await query(
       "SELECT id, nombre, email, password FROM administradores WHERE email = ?",
       [email]

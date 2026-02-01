@@ -9,7 +9,15 @@ const navItems = [
   { name: "Inicio", href: "/" },
   { name: "Servicios", href: "#servicios" },
   { name: "Contacto", href: "#contacto" },
+<<<<<<< HEAD
   { name: "Admin", href: "/admin/login" },
+=======
+<<<<<<< HEAD
+  { name: "Admin", href: "/admin/login" },
+=======
+  { name: "Admin", href: "/admin" },
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
 ]
 
 export function Navbar() {
@@ -51,7 +59,15 @@ export function Navbar() {
         
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <Button asChild>
+<<<<<<< HEAD
             <Link href="#contacto">Solicitar Consulta</Link>
+=======
+<<<<<<< HEAD
+            <Link href="#contacto">Solicitar Consulta</Link>
+=======
+            <Link href="#contacto">Solicitar Co</Link>
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
           </Button>
         </div>
       </nav>

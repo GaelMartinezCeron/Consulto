@@ -31,7 +31,15 @@ import {
 import { Users, Clock, CheckCircle, XCircle, Eye, Loader2 } from "lucide-react"
 
 type Consulta = {
+<<<<<<< HEAD
   id: number
+=======
+<<<<<<< HEAD
+  id: number
+=======
+  id: string
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
   nombre: string
   email: string
   telefono: string
@@ -69,7 +77,15 @@ const tipoConsultaLabels: Record<string, string> = {
 }
 
 export function AdminDashboard({ consultas }: AdminDashboardProps) {
+<<<<<<< HEAD
   const [updatingId, setUpdatingId] = useState<number | null>(null)
+=======
+<<<<<<< HEAD
+  const [updatingId, setUpdatingId] = useState<number | null>(null)
+=======
+  const [updatingId, setUpdatingId] = useState<string | null>(null)
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
 
   const stats = {
     total: consultas.length,
@@ -78,7 +94,15 @@ export function AdminDashboard({ consultas }: AdminDashboardProps) {
     canceladas: consultas.filter((c) => c.estado === "cancelada").length,
   }
 
+<<<<<<< HEAD
   async function handleStatusChange(id: number, newStatus: string) {
+=======
+<<<<<<< HEAD
+  async function handleStatusChange(id: number, newStatus: string) {
+=======
+  async function handleStatusChange(id: string, newStatus: string) {
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
+>>>>>>> 23344f9d05c9dfc6dcfbf1ffff2214653721c96e
     setUpdatingId(id)
     await updateConsultaStatus(id, newStatus)
     setUpdatingId(null)
