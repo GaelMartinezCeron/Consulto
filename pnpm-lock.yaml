@@ -2,6 +2,7 @@ lockfileVersion: '9.0'
 
 settings:
   autoInstallPeers: true
+<<<<<<< HEAD
   excludeLinksFromLockfile: false
 
 importers:
@@ -3636,3 +3637,6 @@ snapshots:
   ws@8.19.0: {}
 
   zod@3.25.76: {}
+=======
+  excludeLinksFromLockfile: false
+>>>>>>> fbb3e8ab0480e7bf221395b7c6e2b2897829683d
